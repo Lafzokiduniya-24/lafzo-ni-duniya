@@ -1,0 +1,280 @@
+
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lafzo Ni Duniya</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  font-family: Georgia, serif;
+  background: #fff5f5;
+  color: #39252e;
+}
+header {
+  background: linear-gradient(135deg,#642b43,#b56b83);
+  color: white;
+  text-align: center;
+  padding: 35px 15px;
+}
+header h1 {
+  font-size: 32px;
+  margin: 5px;
+  letter-spacing: 1px;
+}
+header p {
+  font-style: italic;
+}
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 9px;
+  padding: 15px 8px;
+  background: #f3dce4;
+}
+nav button {
+  border: none;
+  border-radius: 20px;
+  padding: 10px 15px;
+  background: white;
+  color: #71394e;
+  cursor: pointer;
+}
+nav button.active {
+  background: #71394e;
+  color: white;
+}
+.container {
+  max-width: 750px;
+  margin: auto;
+  padding: 18px;
+}
+.welcome {
+  text-align: center;
+  padding: 20px 5px;
+}
+.welcome h2 {
+  color: #984c68;
+}
+.search {
+  width: 100%;
+  padding: 13px;
+  border: 1px solid #d9b2c0;
+  border-radius: 25px;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+.card {
+  background: white;
+  padding: 22px;
+  margin-bottom: 18px;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px #71394e15;
+  border-left: 4px solid #b56b83;
+}
+.card h3 {
+  color: #984c68;
+  margin-top: 0;
+}
+.poetry {
+  text-align: center;
+  line-height: 1.9;
+  white-space: pre-line;
+  font-size: 18px;
+}
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 18px;
+}
+.actions button {
+  background: #71394e;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  padding: 9px 17px;
+}
+footer {
+  background: #642b43;
+  color: white;
+  text-align: center;
+  padding: 22px;
+  margin-top: 35px;
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>Lafzo Ni Duniya</h1>
+  <p>દરેક લાગણી માટે એક નવો શબ્દ...</p>
+  <p>Gujarati | Hindi | English</p>
+</header>
+
+<nav id="categories">
+  <button class="active" onclick="filterPosts('All',this)">All</button>
+  <button onclick="filterPosts('Love',this)">Love</button>
+  <button onclick="filterPosts('Breakup',this)">Breakup</button>
+  <button onclick="filterPosts('Sad',this)">Sad</button>
+  <button onclick="filterPosts('Comedy',this)">Comedy</button>
+  <button onclick="filterPosts('Friendship',this)">Friendship</button>
+  <button onclick="filterPosts('Attitude',this)">Attitude</button>
+  <button onclick="filterPosts('Poems',this)">Poems</button>
+</nav>
+
+<div class="container">
+
+  <section class="welcome">
+    <h2>Welcome to Lafzo Ni Duniya</h2>
+    <p>શબ્દોમાં છુપાયેલી દરેક લાગણીનું એક સરનામું...</p>
+  </section>
+
+  <input class="search" id="search"
+  type="text" placeholder="Search Shayari..."
+  oninput="showPosts()">
+
+  <div id="posts"></div>
+
+</div>
+
+<footer>
+  <h3>Lafzo Ni Duniya</h3>
+  <p>Words that express feelings.</p>
+  <p>Gujarati • Hindi • English</p>
+</footer>
+
+<script>
+const shayari = [
+ {
+  category:"Love",
+  title:"પ્રેમની વાત",
+  language:"Gujarati",
+  content:"તારી સાથેની દરેક પળ ખાસ લાગે છે,\nતારી એક સ્માઈલ આખો દિવસ સુંદર બનાવે છે..."
+ },
+ {
+  category:"Breakup",
+  title:"અધૂરી યાદો",
+  language:"Gujarati",
+  content:"કેટલીક યાદો ક્યારેય ભૂલાતી નથી,\nઅને કેટલીક વાતો ક્યારેય કહેવાતી નથી..."
+ },
+ {
+  category:"Sad",
+  title:"दिल की बात",
+  language:"Hindi",
+  content:"कुछ बातें दिल में रह जाती हैं,\nकुछ यादें हमेशा साथ रह जाती हैं..."
+ },
+ {
+  category:"Comedy",
+  title:"Funny Life",
+  language:"Gujarati",
+  content:"ભણવા બેસું તો ઊંઘ આવી જાય,\nમોબાઇલ લઉં તો આખી રાત નીકળી જાય!"
+ },
+ {
+  category:"Friendship",
+  title:"Friendship",
+  language:"English",
+  content:"Good friends make ordinary moments\nbecome beautiful memories."
+ },
+ {
+  category:"Attitude",
+  title:"My Style",
+  language:"Hindi",
+  content:"अंदाज अपना अलग रखते हैं,\nइसलिए पहचान भी अलग रखते हैं।"
+ },
+ {
+  category:"Poems",
+  title:"Beautiful Words",
+  language:"English",
+  content:"Every word has a story,\nEvery story has a feeling."
+ }
+];
+
+let currentCategory = "All";
+
+function showPosts() {
+ const area = document.getElementById("posts");
+ const search = document.getElementById("search").value.toLowerCase();
+
+ const results = shayari.filter(item =>
+  (currentCategory === "All" || item.category === currentCategory) &&
+  (item.title.toLowerCase().includes(search) ||
+   item.content.toLowerCase().includes(search) ||
+   item.language.toLowerCase().includes(search))
+ );
+
+ area.innerHTML = "";
+
+ if(results.length === 0) {
+  area.innerHTML = "<p style='text-align:center'>No shayari found.</p>";
+  return;
+ }
+
+ results.forEach(item => {
+  const card = document.createElement("div");
+  card.className = "card";
+
+  const heading = document.createElement("h3");
+  heading.textContent = item.title;
+
+  const lang = document.createElement("small");
+  lang.textContent = item.language + " • " + item.category;
+
+  const poetry = document.createElement("div");
+  poetry.className = "poetry";
+  poetry.textContent = item.content;
+
+  const actions = document.createElement("div");
+  actions.className = "actions";
+
+  const copy = document.createElement("button");
+  copy.textContent = "Copy";
+  copy.onclick = () => {
+   navigator.clipboard.writeText(item.content);
+   copy.textContent = "Copied!";
+   setTimeout(() => copy.textContent = "Copy",1500);
+  };
+
+  const share = document.createElement("button");
+  share.textContent = "Share";
+  share.onclick = async () => {
+   if(navigator.share) {
+    await navigator.share({
+     title:item.title,
+     text:item.content
+    });
+   } else {
+    navigator.clipboard.writeText(item.content);
+    share.textContent = "Copied!";
+   }
+  };
+
+  actions.append(copy,share);
+  card.append(heading,lang,poetry,actions);
+  area.appendChild(card);
+ });
+}
+
+function filterPosts(category,button) {
+ currentCategory = category;
+
+ document.querySelectorAll("nav button").forEach(btn =>
+  btn.classList.remove("active")
+ );
+
+ button.classList.add("active");
+ showPosts();
+}
+
+showPosts();
+</script>
+
+</body>
+</html>
