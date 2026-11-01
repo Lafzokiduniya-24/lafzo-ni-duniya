@@ -297,10 +297,17 @@ async function loadShayariFromSupabase() {
     console.error("Shayari load error:", error);
     return;
   }
-
   if (data && data.length > 0) {
-    shayari.splice(0, shayari.length, ...data);
-    renderShayari();
+  const newShayari = data.map(item => ({
+    category: item.category || "Love",
+    title: item.title || "Shayari",
+    language: item.language || "Gujarati",
+    content: item.content || item.text || ""
+  }));
+
+  shayari.splice(0, shayari.length, ...newShayari);
+  renderShayari();
+}
   }
 }
 
