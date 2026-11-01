@@ -297,6 +297,7 @@ async function loadShayariFromSupabase() {
   if (error) {
     console.error("Shayari load error:", error);
     return;
+    alert("Supabase error: " + JSON.stringify(error));
   }
 
   if (data && data.length > 0) {
