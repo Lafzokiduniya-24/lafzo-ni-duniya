@@ -276,5 +276,36 @@ function filterPosts(category,button) {
 showPosts();
 </script>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+const SUPABASE_URL = "sb_publishable_8L2yUNjlvEBMCCEW-0Bi1w_9aWBLNYw";
+const SUPABASE_KEY = "https://lugcrzutobgmdiydrluf.supabase.co/rest/v1/";
+
+const db = window.supabase.createClient(
+  SUPABASE_URL,
+  SUPABASE_KEY
+);
+
+async function loadShayariFromSupabase() {
+  const { data, error } = await db
+    .from("shayari")
+    .select("id, title, content, language, category")
+    .order("id", { ascending: false });
+
+  if (error) {
+    console.error("Shayari load error:", error);
+    return;
+  }
+
+  if (data && data.length > 0) {
+    shayari.splice(0, shayari.length, ...data);
+    renderShayari();
+  }
+}
+
+loadShayariFromSupabase();
+</script>
+  
 </body>
 </html>
