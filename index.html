@@ -294,11 +294,11 @@ async function loadShayariFromSupabase() {
     .select("id, title, content, text, language, category")
     .order("id", { ascending: false });
 
-  if (error) {
-    console.error("Shayari load error:", error);
-    return;
-    alert("Supabase error: " + JSON.stringify(error));
-  }
+ if (error) {
+  alert("Supabase error: " + JSON.stringify(error));
+  console.error("Shayari load error:", error);
+  return;
+ }
 
   if (data && data.length > 0) {
     const newShayari = data.map(item => ({
