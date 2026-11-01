@@ -291,7 +291,7 @@ const db = window.supabase.createClient(
 async function loadShayariFromSupabase() {
   const { data, error } = await db
     .from("shayari")
-    .select("id, title, content, text, language, category")
+    .select("id, title, content, language, category")
     .order("id", { ascending: false });
 
  if (error) {
@@ -305,7 +305,7 @@ async function loadShayariFromSupabase() {
       category: item.category || "Love",
       title: item.title || "Shayari",
       language: item.language || "Gujarati",
-      content: item.content || item.text || ""
+      content: item.content || ""
     }));
 
     shayari.splice(0, shayari.length, ...newShayari);
